@@ -25,9 +25,9 @@
               </template>
           </el-menu-item>
           
-          <el-menu-item index="1-2">
+          <el-menu-item index="1-2" class="el-category">
             <template slot="title">
-              <router-link to="/admin/category-list">   栏目管理
+              <router-link to="/admin/category-list">  栏目管理
               </router-link> 
              </template>
           </el-menu-item>
@@ -47,10 +47,13 @@
 }
 .el-menu-vertical-demo:not(.el-menu--collapse){
   width: 200px;
-  min-height: 400px;
+  min-height: 630px;
 }
 .el-menu-vertical-demo a{
   color:inherit;
   text-decoration: none;
+}
+.el-category{
+  margin-left: 5px;
 }
 </style>

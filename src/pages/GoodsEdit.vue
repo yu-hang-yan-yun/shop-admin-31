@@ -17,12 +17,12 @@
   </el-form-item>
 
 <el-form-item label="推荐类型">
-    <el-checkbox label="置顶" name="type" v-model="form.is_top"></el-checkbox>
-    <el-checkbox label="热门" name="type" v-model="form.is_hot"></el-checkbox>
+    <el-checkbox label="置顶" name="type" v-model="is_top"></el-checkbox>
+    <el-checkbox label="热门" name="type" v-model="is_hot"></el-checkbox>
 </el-form-item>
 
 <el-form-item label="内容标题">
-   <el-input v-model="form.sub_title"></el-input>
+   <el-input v-model="form.subtitle"></el-input>
 </el-form-item>
 
 <el-form-item label="副标题">
@@ -85,7 +85,7 @@
 </el-form-item>
 
 <el-form-item>
-    <el-button type="primary" @click="onSubmit">立即创建</el-button>
+    <el-button type="primary" @click="onSubmit">完成</el-button>
     <el-button>取消</el-button>
 </el-form-item>
 
@@ -109,7 +109,8 @@ export default {
         status:false,
         is_top:false,
         is_hot:false,
-        sub_title:"",
+        content:"",
+        subtitle:"",
         title:"",
         imgList:[],//封面图片
         goods_no:"",
@@ -118,7 +119,6 @@ export default {
         sell_price:"",
         fileList:[],//多张图
         zhaiyao:"",
-
         content:"",
 
         is_slide:false
@@ -140,13 +140,13 @@ export default {
 
     methods: {
       handleAvatarSuccess(res,file){
-          this.imageUrl=URL.createObjectURL(file.raw);
+          this.imgList=URL.createObjectURL(file.raw);
 
           //把上传的结果赋值
           this.form.imgList=[res];
       },
       beforeAvatarUpload(file) {
-        var isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
@@ -169,23 +169,22 @@ export default {
 
       //上传多张图片的成功回调
       handleCartSuccess(res,file,fileList){
-        var files=fileList.map(v=>{
+        var file=fileList.map(v=>{
            return v.response;
         });
 
-        this.form.fileList=files;
+        this.from.fileList=files;
       },
 
       onSubmit(){
         //提交到添加商品的接口
         this.$axios({
-          url:"http://localhost:8899/admin/goods/add/goods", 
+          url:"http://localhost:8899/admin/goods/edit/" + this.$route.params.id,
           method:"POST",
           data:this.form,
           //处理session跨域
           withCredentials:true
         }).then(res=>{
-          console.log(res);
            var {status,message}=res.data;
 
            if(status===0){
@@ -194,7 +193,7 @@ export default {
              //返回上一页
              this.$router.back();
            }else{
-             this.$router.push("/login");
+            //  this.$router.push("/login");
            }
         })
       }
@@ -207,6 +206,23 @@ export default {
        }).then(res => {
            var {status,message} = res.data;
            this.categorys=message;
+       });
+
+       //获取动态参数的id
+       var {id}=this.$route.params;
+
+       this.$axios({
+          url:"http://localhost:8899/admin/goods/getgoodsmodel/"+id,
+          method:"GET"
+       }).then(res=>{
+         var {status,message}=res.data;
+         //对象合并
+         this.form={
+           ...message,
+           category_id:+message.category_id,
+         }
+
+         this.imageUrl=message.imgList[0].url;
        })
     }
   

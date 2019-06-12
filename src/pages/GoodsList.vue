@@ -33,7 +33,10 @@
       width="200">
      <template slot-scope="scope">
        <el-row type="flex" align="middle">
+         <img :src="scope.row.imgurl" class="goods-img"/>
+        <div>
           {{ scope.row.date }}
+        </div>
        </el-row>
      </template>
     </el-table-column>
@@ -129,7 +132,7 @@
     
     //编辑商品
     handleEdit(goods) {
-        console.log(goods);
+        this.$router.push("/admin/goods-edit/"+goods.id)
     },
 
  
@@ -220,5 +223,11 @@
 }
  .input-with-select .el-input-group__prepend {
     background-color: #fff;
-  }
+}
+.goods-img{
+  width: 60px;
+  height:60px;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
 </style>
