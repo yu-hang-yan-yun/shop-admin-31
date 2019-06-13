@@ -4,12 +4,16 @@ import VueRouter from 'vue-router';
 import axios from "axios";
 
 
+
 //导入组件
 import ElementUI from "element-ui"
 //导入样式
 import 'element-ui/lib/theme-chalk/index.css';
 //注册elementui插件
 Vue.use(ElementUI);
+
+//导入vuex的store
+import store from "./store";
 
 //导入组件
 import Login from "./pages/Login.vue";
@@ -45,5 +49,6 @@ Vue.prototype.$axios=axios;
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store
 }).$mount('#app')

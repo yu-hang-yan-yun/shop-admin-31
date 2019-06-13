@@ -10,7 +10,7 @@
   </el-form-item>
 
   <el-form-item label="密码" prop="password">
-    <el-input v-model="form.password"></el-input>
+    <el-input type="password" v-model="form.password"></el-input>
   </el-form-item>
  
 
@@ -60,6 +60,8 @@
         }).then(res=>{
            var {message,status}=res.data;
 
+           this.$store.commit("setUser",message);
+
            //登陆成功
            if(status===0){
              this.$router.push("/");
@@ -68,6 +70,8 @@
            if(status===1){
              this.$message.error(message);
            }
+
+
         })
           }
         });
